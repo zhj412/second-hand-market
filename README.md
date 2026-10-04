@@ -12,6 +12,7 @@
 - [快速开始（部署步骤）](#快速开始部署步骤)
 - [测试账号](#测试账号)
 - [功能模块与测试说明](#功能模块与测试说明)
+- [自动化测试](#自动化测试)
 - [常用命令](#常用命令)
 - [注意事项](#注意事项)
 
@@ -28,7 +29,7 @@
 | 数据库驱动 | mysqlclient |
 | 图片处理 | Pillow |
 | 环境变量 | python-dotenv |
-| 运行环境 | Python 3.8+（本项目开发环境为 Python 3.11） |
+| 运行环境 | Python 3.8～3.12（本项目开发环境为 3.11） |
 
 ## 功能特性
 
@@ -71,7 +72,7 @@ second_hand_market/
 
 ### 1. 环境要求
 
-- Python 3.8 及以上（推荐 3.11）
+- Python 3.8～3.12（Django 4.2 兼容范围，**请勿使用 3.13 / 3.14**，推荐 3.11）
 - MySQL 5.7 或 8.0
 - 已安装 Git（用于克隆项目）
 
@@ -188,7 +189,36 @@ python manage.py runserver 8080
 | **消息（message）** | 站内消息收发 | 发送消息、已读/未读状态、收件箱/发件箱、消息内容展示 |
 | **后台管理（admin + SimpleUI）** | 各模块增删改查 | 后台登录、菜单展示、商品/订单/用户/分类/消息的增删改查、权限控制 |
 
-> 说明：本项目各应用内的 `tests.py` 目前为空白模板，尚未编写自动化测试用例。可基于 Django 自带的 `TestCase` 针对上述测试点补充单元测试与集成测试。
+> 本项目已针对上述模块编写了完整的自动化测试用例（共 **63 个**），详见下方「自动化测试」章节。
+
+---
+
+## 自动化测试
+
+项目内置 **63 个自动化测试用例**，基于 Django 自带的 `TestCase` 编写，覆盖 6 个业务模块与首页。
+
+### 运行测试
+
+```bash
+# 请使用 Python 3.8～3.12（Windows 下推荐用 py 启动器指定版本）
+py -3.11 manage.py test                              # 运行全部测试
+py -3.11 manage.py test goods                        # 只运行某个应用
+py -3.11 manage.py test users.tests.UserLoginViewTest  # 只运行某个测试类
+```
+
+### 测试覆盖范围
+
+| 模块 | 测试类 | 覆盖内容 |
+| --- | --- | --- |
+| 首页 | `HomeViewTest` | 页面可访问、只显示在售商品、展示顶级分类 |
+| 用户 | `UserProfileModelTest` / `UserRegisterViewTest` / `UserLoginViewTest` / `UserLogoutViewTest` / `UserProfileViewTest` | 模型、注册（含重复注册/密码不一致）、登录（含错误密码）、退出、个人中心更新与登录保护 |
+| 商品 | `CategoryModelTest` / `GoodsModelTest` / `GoodsListViewTest` / `GoodsPublishViewTest` / `GoodsDetailViewTest` | 分类自关联、商品模型、列表搜索/筛选/排序、发布必填校验、详情浏览量自增与 404 |
+| 购物车 | `CartModelTest` / `CartListViewTest` | 唯一约束、默认数量、登录保护、只看自己的购物车 |
+| 订单 | `OrderModelTest` / `OrderListViewTest` / `OrderDetailViewTest` | 模型、买家视角列表、他人订单返回 404 |
+| 收藏 | `FavoriteModelTest` / `FavoriteListViewTest` | 唯一约束、登录保护、只看自己的收藏 |
+| 消息 | `MessageModelTest` / `MessageListViewTest` | 默认已读状态、登录保护、只看收到的消息 |
+
+> 测试覆盖了「模型单元测试」「视图功能测试」「登录鉴权」「404 / 302 跳转」「筛选与排序」等常见测试场景，可作为功能测试 / 回归测试的学习范例。
 
 ---
 

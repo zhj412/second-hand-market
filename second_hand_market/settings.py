@@ -85,6 +85,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# 未登录用户访问受保护页面时跳转的登录页
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'home'
+
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
