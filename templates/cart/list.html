@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}购物车 - 二手交易平台{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h3 class="mb-4">购物车</h3>
+    
+    {% if cart_items %}
+    <div class="card">
+        <div class="card-body">
+            <div class="list-group list-group-flush">
+                {% for item in cart_items %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        {% if item.goods.cover_image %}
+                        <img src="{{ item.goods.cover_image.url }}" style="width: 80px; height: 80px; object-fit: cover;">
+                        {% endif %}
+                        <div class="ms-3">
+                            <h6>{{ item.goods.title }}</h6>
+                            <p class="price mb-0">¥{{ item.goods.price }}</p>
+                            <small class="text-muted">卖家：{{ item.goods.seller.username }}</small>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="{% url 'goods:detail' item.goods.id %}" class="btn btn-primary">查看详情</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-cart text-muted display-1"></i>
+        <p class="text-muted mt-3">购物车是空的</p>
+        <a href="{% url 'goods:list' %}" class="btn btn-primary">去逛逛</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

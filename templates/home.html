@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}首页 - 二手交易平台{% endblock %}
+{% block content %}
+
+<!-- 横幅区域 -->
+<div class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">二手交易平台</h1>
+        <p class="lead mb-4">淘你所爱，物尽其用</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="{% url 'goods:list' %}" method="get">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" name="q" placeholder="搜索你想要的商品...">
+                        <button class="btn btn-light" type="submit">搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- 分类导航 -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="mb-4">商品分类</h3>
+            <div class="d-flex flex-wrap gap-3">
+                {% for cat in categories %}
+                <a href="{% url 'goods:list' %}?category={{ cat.id }}" class="btn btn-outline-primary">
+                    {% if cat.icon %}<i class="{{ cat.icon }}"></i> {% endif %}{{ cat.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 最新商品 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>最新上架</h3>
+                <a href="{% url 'goods:list' %}" class="text-primary">查看更多 <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for goods in goods_list %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="card card-hover h-100">
+                <a href="{% url 'goods:detail' goods.id %}" class="text-decoration-none text-dark">
+                    {% if goods.cover_image %}
+                    <img src="{{ goods.cover_image.url }}" class="card-img-top" alt="{{ goods.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-image text-muted display-4"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title text-truncate">{{ goods.title }}</h6>
+                        <p class="price h5 mb-1">¥{{ goods.price }}</p>
+                        {% if goods.original_price %}
+                        <span class="original-price">¥{{ goods.original_price }}</span>
+                        {% endif %}
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-muted">{{ goods.seller.username }}</small>
+                            <small class="text-muted"><i class="bi bi-eye"></i> {{ goods.view_count }}</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-box text-muted display-1"></i>
+            <p class="text-muted mt-3">暂无商品</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}发布商品 - 二手交易平台{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <h3 class="text-center mb-4">发布商品</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">商品标题 *</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">商品分类</label>
+                            <select class="form-select" name="category">
+                                <option value="">请选择分类</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">售价 *</label>
+                                <input type="number" class="form-control" name="price" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">原价</label>
+                                <input type="number" class="form-control" name="original_price" step="0.01">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">商品封面 *</label>
+                            <input type="file" class="form-control" name="cover_image" accept="image/*" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">商品描述 *</label>
+                            <textarea class="form-control" name="description" rows="5" required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">发布商品</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

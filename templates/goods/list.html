@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}商品列表 - 二手交易平台{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">商品分类</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{% url 'goods:list' %}" class="text-decoration-none">全部分类</a>
+                        {% for cat in categories %}
+                        <a href="{% url 'goods:list' %}?category={{ cat.id }}" class="text-decoration-none">
+                            {{ cat.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <h3 class="mb-4">商品列表</h3>
+            <div class="row g-4">
+                {% for goods in goods %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-hover h-100">
+                        <a href="{% url 'goods:detail' goods.id %}" class="text-decoration-none text-dark">
+                            {% if goods.cover_image %}
+                            <img src="{{ goods.cover_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h6 class="card-title text-truncate">{{ goods.title }}</h6>
+                                <p class="price h5 mb-1">¥{{ goods.price }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">暂无符合条件的商品</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

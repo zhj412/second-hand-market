@@ -1,0 +1,5 @@
+Django==4.2.25
+django-simpleui
+mysqlclient
+Pillow
+python-dotenv

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}我的订单 - 二手交易平台{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h3 class="mb-4">我的订单</h3>
+    
+    {% if orders %}
+    <div class="row g-4">
+        {% for order in orders %}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="card-title">订单号：{{ order.order_no }}</h6>
+                            <span class="badge bg-info">{{ order.get_status_display }}</span>
+                        </div>
+                        <small class="text-muted">{{ order.created_at|date:'Y-m-d H:i' }}</small>
+                    </div>
+                    {% if order.goods.cover_image %}
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ order.goods.cover_image.url }}" style="width: 60px; height: 60px; object-fit: cover;">
+                        <div class="ms-3">
+                            <h6>{{ order.goods.title }}</h6>
+                            <p class="price mb-0">¥{{ order.price }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <a href="{% url 'order:detail' order.id %}" class="btn btn-outline-primary w-100">查看详情</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-receipt text-muted display-1"></i>
+        <p class="text-muted mt-3">暂无订单</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

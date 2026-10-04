@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}{{ goods.title }} - 二手交易平台{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6">
+            {% if goods.cover_image %}
+            <img src="{{ goods.cover_image.url }}" class="img-fluid rounded" style="width: 100%; height: 400px; object-fit: contain;">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2 class="mb-3">{{ goods.title }}</h2>
+            
+            <div class="mb-4">
+                <span class="price h3">¥{{ goods.price }}</span>
+                {% if goods.original_price %}
+                <span class="original-price h5 ms-2">¥{{ goods.original_price }}</span>
+                {% endif %}
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <strong class="me-3">卖家：</strong>
+                        <span class="badge bg-secondary">{{ goods.seller.username }}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <strong class="me-3">浏览：</strong>
+                        <span>{{ goods.view_count }} 次</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5>商品描述</h5>
+                <p class="text-muted">{{ goods.description|linebreaks }}</p>
+            </div>
+
+            <div class="d-flex gap-3">
+                {% if user.is_authenticated %}
+                <button class="btn btn-primary btn-lg flex-grow-1">
+                    <i class="bi bi-cart-plus"></i> 加入购物车
+                </button>
+                <button class="btn btn-danger btn-lg flex-grow-1">
+                    <i class="bi bi-lightning-charge"></i> 立即购买
+                </button>
+                {% else %}
+                <a href="{% url 'users:login' %}" class="btn btn-primary btn-lg flex-grow-1">
+                    请先登录
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
