@@ -229,6 +229,8 @@ py -3.11 manage.py test
 
 项目已配置 GitHub Actions（`.github/workflows/tests.yml`），每次 **push** 或 **Pull Request** 都会自动用 Python 3.11 运行全部测试，仓库的「Actions」标签可查看运行结果。
 
+> 完整的测试报告见 [docs/测试报告.md](docs/测试报告.md)。
+
 ### 测试覆盖范围
 
 | 模块 | 测试类 | 覆盖内容 |
