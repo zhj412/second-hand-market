@@ -189,22 +189,45 @@ python manage.py runserver 8080
 | **消息（message）** | 站内消息收发 | 发送消息、已读/未读状态、收件箱/发件箱、消息内容展示 |
 | **后台管理（admin + SimpleUI）** | 各模块增删改查 | 后台登录、菜单展示、商品/订单/用户/分类/消息的增删改查、权限控制 |
 
-> 本项目已针对上述模块编写了完整的自动化测试用例（共 **63 个**），详见下方「自动化测试」章节。
+> 本项目已针对上述模块编写了完整的自动化测试用例（共 **64 个**），详见下方「自动化测试」章节。
 
 ---
 
 ## 自动化测试
 
-项目内置 **63 个自动化测试用例**，基于 Django 自带的 `TestCase` 编写，覆盖 6 个业务模块与首页。
+项目内置 **64 个自动化测试用例**，基于 Django 自带的 `TestCase` 编写，覆盖 6 个业务模块与首页，当前代码覆盖率 **100%**。
 
 ### 运行测试
 
+推荐使用 **pytest**（测试专用 SQLite 内存库，无需 MySQL、速度更快）：
+
 ```bash
-# 请使用 Python 3.8～3.12（Windows 下推荐用 py 启动器指定版本）
-py -3.11 manage.py test                              # 运行全部测试
-py -3.11 manage.py test goods                        # 只运行某个应用
-py -3.11 manage.py test users.tests.UserLoginViewTest  # 只运行某个测试类
+# 先安装测试依赖
+pip install -r requirements-dev.txt
+
+# 运行全部测试并生成覆盖率报告
+py -3.11 -m pytest
+
+# 只运行某个模块 / 某个测试类
+py -3.11 -m pytest goods
+py -3.11 -m pytest users/tests.py::UserLoginViewTest
 ```
+
+也可以使用 Django 自带的测试命令（默认连接 MySQL）：
+
+```bash
+py -3.11 manage.py test
+```
+
+### 代码覆盖率
+
+当前代码覆盖率 **100%**（共 262 行语句）。运行 `pytest` 后：
+- 终端会打印每个模块的覆盖率与未覆盖行；
+- 打开 `htmlcov/index.html` 可查看可视化覆盖率报告。
+
+### 持续集成（CI）
+
+项目已配置 GitHub Actions（`.github/workflows/tests.yml`），每次 **push** 或 **Pull Request** 都会自动用 Python 3.11 运行全部测试，仓库的「Actions」标签可查看运行结果。
 
 ### 测试覆盖范围
 

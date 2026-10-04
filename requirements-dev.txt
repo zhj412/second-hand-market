@@ -1,0 +1,4 @@
+# 测试与开发相关依赖（运行项目本身不需要）
+pytest
+pytest-django
+pytest-cov

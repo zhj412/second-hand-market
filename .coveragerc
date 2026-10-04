@@ -1,0 +1,7 @@
+[run]
+# 覆盖率统计时不纳入迁移文件、测试文件、后台与 App 配置
+omit =
+    */migrations/*
+    */tests.py
+    */admin.py
+    */apps.py

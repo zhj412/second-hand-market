@@ -7,11 +7,17 @@
 - 退出视图：跳转首页、会话清除
 - 个人中心：登录保护、资料展示、资料更新
 """
+import tempfile
+
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from users.models import UserProfile
+
+# 将测试期间上传的头像隔离到临时目录，避免污染真实的 media/ 目录
+TEST_MEDIA_ROOT = tempfile.mkdtemp()
 
 
 class UserProfileModelTest(TestCase):
@@ -129,6 +135,7 @@ class UserLogoutViewTest(TestCase):
         self.assertNotIn('_auth_user_id', self.client.session)
 
 
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
 class UserProfileViewTest(TestCase):
     """个人中心视图测试。"""
 
@@ -158,3 +165,14 @@ class UserProfileViewTest(TestCase):
         self.assertEqual(self.user.profile.nickname, 'Alice')
         self.assertEqual(self.user.profile.phone, '13900139000')
         self.assertEqual(self.user.profile.address, '北京市朝阳区')
+
+    def test_profile_update_with_avatar(self):
+        self.client.login(username='alice', password='pass12345')
+        avatar = SimpleUploadedFile('avatar.jpg', b'fake-image', content_type='image/jpeg')
+        response = self.client.post(reverse('users:profile'), {
+            'nickname': 'Alice',
+            'avatar': avatar,
+        })
+        self.assertRedirects(response, reverse('users:profile'))
+        profile = UserProfile.objects.get(user=self.user)
+        self.assertTrue(profile.avatar.name.endswith('avatar.jpg'))

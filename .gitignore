@@ -11,6 +11,12 @@ dist/
 *.egg-info/
 *.egg
 
+# 测试与覆盖率产物（pytest / coverage）
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
 # ===================== 虚拟环境 =====================
 venv/
 env/
