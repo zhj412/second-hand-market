@@ -3,3 +3,4 @@ django-simpleui
 mysqlclient
 Pillow
 python-dotenv
+djangorestframework

@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     'order',
     'favorite',
     'message',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +91,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # 未登录用户访问受保护页面时跳转的登录页
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'home'
+
+# DRF 接口配置
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+}
 
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
